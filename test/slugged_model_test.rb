@@ -49,10 +49,21 @@ class SluggedModelTest < Test::Unit::TestCase
       end
     end
 
-    should "raise an error if the friendly_id text is reserved" do
-      assert_raises(FriendlyId::SlugGenerationError) do
+    should "not raise an error if the friendly_id text is reserved" do
+      assert_not_raise(FriendlyId::SlugGenerationError) do
         Post.create!(:title => "new")
       end
+    end
+    
+    should "generate a sequenced slug if friendly_id text is reserved" do
+      post = Post.create!(:title => "new")
+      assert_equal("new--1", post.friendly_id)
+    end
+    
+    should "still sequence reserved word slugs" do
+      post = Post.create!(:title => "new")
+      post2 = Post.create!(:title => "new")
+      assert_equal("new--2", post2.friendly_id)
     end
 
     should "raise an error if the friendly_id text is blank" do

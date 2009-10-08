@@ -27,6 +27,10 @@ class SlugTest < Test::Unit::TestCase
       assert_equal ["test", "2"], Slug::parse("test--2")
     end
     
+    should "parse the slug name and sequence for reserved words" do
+      assert_equal ["new", "1"], Slug::parse("new--1")
+    end
+    
     should "parse with a default sequence of 1" do
       assert_equal ["test", "1"], Slug::parse("test")
     end
@@ -52,10 +56,15 @@ class SlugTest < Test::Unit::TestCase
       slug = Slug.new(:name => "test", :sequence => 2)
       assert_equal "test--2", slug.to_friendly_id
     end
-  
-    should "not include the sequence if the sequence is 1" do
+   
+    should "not include the sequence if the sequence is 1 if text is not reserved" do
       slug = Slug.new(:name => "test", :sequence => 1)
       assert_equal "test", slug.to_friendly_id
+    end
+    
+    should "include sequence if it is 1 and text is reserved" do
+      slug = Slug.new(:name => "new", :sequence => 1, :reserved => true)
+      assert_equal "new--1", slug.to_friendly_id
     end
     
   end

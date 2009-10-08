@@ -2,7 +2,7 @@
 
 # A Slug is a unique, human-friendly identifier for an ActiveRecord.
 class Slug < ActiveRecord::Base
-
+  attr_accessor :reserved
   belongs_to :sluggable, :polymorphic => true
   before_save :check_for_blank_name, :set_sequence
 
@@ -80,7 +80,7 @@ class Slug < ActiveRecord::Base
   end
 
   def to_friendly_id
-    sequence > 1 ? "#{name}--#{sequence}" : name
+    (sequence > 1 || self.reserved == true) ? "#{name}--#{sequence}" : name
   end
 
   protected

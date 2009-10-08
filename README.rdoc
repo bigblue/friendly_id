@@ -140,8 +140,8 @@ Here's how to do it:
   end
 
 As of FriendlyId version 2.0.2, "new" and "index" are reseved by default. When
-you attempt to store a reserved value, FriendlyId raises a
-FriendlyId::SlugGenerationError.
+you attempt to store a reserved value, FriendlyId will add a sequence to the slug 
+text e.g. "new" => "new--1"
 
 
 === Scoped Slugs

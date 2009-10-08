@@ -25,6 +25,14 @@ require 'models/thing'
 require 'models/event'
 
 ActiveRecord::Base.establish_connection :adapter => "sqlite3", :database => ":memory:"
+
+def assert_not_raise(exception, &block)
+  yield
+  assert true
+rescue exception => e
+  flunk "Received a #{exception.to_s} exception, but wasn't expecting one: #{e}"
+end
+
 silence_stream(STDOUT) do
   load(File.dirname(__FILE__) + "/schema.rb")
 end

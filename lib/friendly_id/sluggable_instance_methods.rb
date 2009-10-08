@@ -73,9 +73,7 @@ module FriendlyId::SluggableInstanceMethods
     if base.length > friendly_id_options[:max_length]
       base = base[0...friendly_id_options[:max_length]]
     end
-    if friendly_id_options[:reserved].include?(base)
-      raise FriendlyId::SlugGenerationError.new("The slug text is a reserved value")
-    end
+    
     return base
   end
 
@@ -100,6 +98,11 @@ module FriendlyId::SluggableInstanceMethods
     if self.class.friendly_id_options[:use_slug] && new_slug_needed?
       @most_recent_slug = nil
       slug_attributes = {:name => slug_text}
+      
+      if friendly_id_options[:reserved].include?(slug_text)
+        slug_attributes[:reserved] = true
+      end
+      
       if friendly_id_options[:scope]
         scope = send(friendly_id_options[:scope])
         slug_attributes[:scope] = scope.respond_to?(:to_param) ? scope.to_param : scope.to_s

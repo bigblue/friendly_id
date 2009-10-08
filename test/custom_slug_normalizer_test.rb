@@ -25,9 +25,9 @@ class CustomSlugNormalizerTest < Test::Unit::TestCase
 
     should "respect the reserved option" do
       Thing.friendly_id_options = Thing.friendly_id_options.merge(:reserved => ["a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"])
-      assert_raises FriendlyId::SlugGenerationError do
-        Thing.create!(:name => "test")
-      end
+      @thing = Thing.create!(:name => "test")
+      
+      assert_equal("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3--1", @thing.friendly_id)
     end
   
   end
